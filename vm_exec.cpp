@@ -13,7 +13,8 @@ enum{
     TCH,
     TSTR,
     TD,
-    TADDR
+    TADDR,
+    TSTRUCT
 };
 
 class Var{
@@ -32,10 +33,17 @@ private:
         bool is_localvar=false;
     };
 
+    struct StructVal{
+        vector<struct VarNode> dictVarsStruct;
+        string labelstruct;
+        int id_var;
+        bool is_localvar=false;
+    };
 
 
 public:
     VarNode var;
+    struct StructVal varstruct;
     int id_var;
     bool operator ==(Var eq){
         if(this->var.kind_type != eq.var.kind_type) return false;
@@ -56,6 +64,9 @@ public:
             case TSTR:{
                 if(strcmp(this->var.sval,eq.var.sval) != 0) return false;
             }
+            case TSTRUCT:{
+                break;
+            }
 
         }
         return true;
@@ -64,12 +75,7 @@ public:
 
 class Struct : private Var{
 public:
-    struct StructVal{
-        vector<struct VarNode> dictVarsStruct;
-        string labelstruct;
-        int id_var;
-        bool is_localvar=false;
-    };
+
 
     StructVal var;
 
@@ -131,17 +137,91 @@ void DelVar(Var *find_var,bool is_local=true){
 
 class OperatorFuncs{
 public:
-    void Sum(Var arg1,Var arg2,Var argres){
+    void Sum(Var arg1,Var arg2,Var &argres){
+        if(arg1.var.kind_type == TDOUBLE)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.ival+arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg1.var.kind_type == TINT)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival+(long long int)arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TDOUBLE)
+        {
+            if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival+arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TINT)
+        {
+            if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival+(long long int)arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
+        }
 
     }
-    void Sub(Var arg1,Var arg2,Var argres){
-
+    void Sub(Var arg1,Var arg2,Var &argres){
+        if(arg1.var.kind_type == TDOUBLE)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.ival-arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg1.var.kind_type == TINT)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival-(long long int)arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TDOUBLE)
+        {
+            if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival-arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TINT)
+        {
+            if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival-(long long int)arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
     }
     void Pow(Var arg1,Var arg2,Var argres){
-
+        if(arg1.var.kind_type == TDOUBLE)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.iva*arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg1.var.kind_type == TINT)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival*(long long int)arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TDOUBLE)
+        {
+            if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival*arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TINT)
+        {
+            if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival*(long long int)arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
     }
     void Div(Var arg1,Var arg2,Var argres){
-
+        if(arg1.var.kind_type == TDOUBLE)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.ival/arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg1.var.kind_type == TINT)
+        {
+            if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival/(long long int)arg1.var.dval;
+            if(arg1.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TDOUBLE)
+        {
+            if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival/arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
+        }
+        if(arg2.var.kind_type == TINT)
+        {
+            if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival/(long long int)arg2.var.dval;
+            if(arg2.var.kind_type == TDOUBLE) return;
     }
 };
 
