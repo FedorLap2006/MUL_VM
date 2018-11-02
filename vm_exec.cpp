@@ -20,7 +20,7 @@ enum{
 class Var{
 private:
     struct VarNode{
-        union Val{
+        union{
             char *sval;
             char ch;
             long long int ival;
@@ -28,6 +28,7 @@ private:
 
             void *pval;
         };
+
         int kind_type;
         string label;
         bool is_localvar=false;
@@ -137,6 +138,7 @@ void DelVar(Var *find_var,bool is_local=true){
 
 class OperatorFuncs{
 public:
+
     void Sum(Var arg1,Var arg2,Var &argres){
         if(arg1.var.kind_type == TDOUBLE)
         {
@@ -180,6 +182,7 @@ public:
         {
             if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival-(long long int)arg2.var.dval;
             if(arg2.var.kind_type == TDOUBLE) return;
+        }
     }
     void Pow(Var arg1,Var arg2,Var argres){
         if(arg1.var.kind_type == TDOUBLE)
@@ -201,6 +204,7 @@ public:
         {
             if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival*(long long int)arg2.var.dval;
             if(arg2.var.kind_type == TDOUBLE) return;
+        }
     }
     void Div(Var arg1,Var arg2,Var argres){
         if(arg1.var.kind_type == TDOUBLE)
@@ -222,22 +226,86 @@ public:
         {
             if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival/(long long int)arg2.var.dval;
             if(arg2.var.kind_type == TDOUBLE) return;
+        }
     }
 };
 
-void Exec(ifstream fileinput){
-    if (fileinput.is_open()) {
-        std::string line;
-        while (std::getline(fileinput, line)) {
-            if(line.find("",))
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+void AnalyseCommand(string command , Var arg1 , Var arg2){
+    if(command == "addvar"){
+        Var newvar;
+        if(arg1 == "int"){
+            newvar.var.kind_type=TINT;
+            newvar.var.ival=0;
         }
-        fileinput.close();
-        return;
+        if(arg1 == "double"){
+            newvar.var.kind_type=TD;
+            newvar.var.ival=0;
+        }
+        if(arg1 == "char"){
+            newvar.var.kind_type=TCH;
+            newvar.var.ival=0;
+        }
+        if(arg1 == "string"){
+            newvar.var.kind_type=TSTR;
+            newvar.var.ival=0;
+        }
+        if(arg1 == "ptr"){
+            newvar.var.kind_type=TADDR;
+            newvar.var.ival=0;
+        }
     }
-    else {
-        std::cerr << "Unable to open file\n";
-        return;
+    if(command )
+}
+
+void Exec(string filename){
+    std::ifstream codefile(filename, std::ios::in);
+
+    string arg1,arg2;
+
+    string command;
+
+=======
+void Exec(string filename){
+    std::ifstream codefile(filename, std::ios::in);
+
+>>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
+=======
+void Exec(string filename){
+    std::ifstream codefile(filename, std::ios::in);
+
+>>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
+    if(codefile.fail())
+    {
+        std::cerr << "Cannot to open file\n";
     }
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+    while(!codefile.eof()){
+        codefile >> command;
+        codefile.getline(arg1,256,',');
+        codefile.getline(arg2.var.label,256,',');
+        AnalyseCommand(command,arg1,arg2);
+    }
+=======
+>>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
+=======
+>>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
+=======
+void Exec(string filename){
+    std::ifstream codefile(filename, std::ios::in);
+
+    if(codefile.fail())
+    {
+        std::cerr << "Cannot to open file\n";
+    }
+
+>>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
+
+
 }
 
 
