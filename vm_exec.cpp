@@ -255,7 +255,27 @@ void AnalyseCommand(string command , Var arg1 , Var arg2){
             newvar.var.ival=0;
         }
     }
-    if(command )
+    if(command == "add"){
+
+    }
+    if(command == "sub"){
+
+    }
+    if(command == "pow"){
+
+    }
+    if(command == "div"){
+
+    }
+    if(command == "eq"){
+
+    }
+    if(command == "xor"){
+
+    }
+    if(command == "if"){
+        
+    }
 }
 
 
