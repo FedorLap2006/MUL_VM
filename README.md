@@ -1,2 +1,2 @@
-# MUL_VM
-Virtual machine of new universal,quick langugre
+# Vurtual machine of Universal Languge MUL(MUL Universal Lang)
+Virtual machine of new universal,quick,protected languge
