@@ -233,6 +233,7 @@ public:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 void AnalyseCommand(string command , Var arg1 , Var arg2){
     if(command == "addvar"){
         Var newvar;
@@ -293,6 +294,16 @@ void Exec(string filename){
 =======
 >>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
 =======
+>>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
+=======
+void Exec(string filename){
+    std::ifstream codefile(filename, std::ios::in);
+
+    if(codefile.fail())
+    {
+        std::cerr << "Cannot to open file\n";
+    }
+
 >>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
 =======
 void Exec(string filename){
