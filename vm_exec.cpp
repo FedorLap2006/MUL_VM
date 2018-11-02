@@ -240,7 +240,7 @@ bool add_loc_var=false;
 
 int AnalyseCommand(string command , string arg1 , string arg2){
     bool is_loc = add_loc_var;
-    if(command == "addvar"){
+    if(command == "addvar"){ // add variable-command
         Var newvar;
         if(arg1 == "int"){
             newvar.var.kind_type=TINT;
@@ -268,25 +268,25 @@ int AnalyseCommand(string command , string arg1 , string arg2){
             RegVar(newvar,is_loc);
         }
     }
-    if(command == "add"){
+    if(command == "add"){ // math + operator
 
     }
-    if(command == "sub"){
+    if(command == "sub"){ // math - operator
 
     }
-    if(command == "pow"){
+    if(command == "pow"){ // math * operator
 
     }
-    if(command == "div"){
+    if(command == "div"){ // math / operator
 
     }
-    if(command == "eq"){
+    if(command == "eq"){ // bin = operator
 
     }
-    if(command == "xor"){
+    if(command == "xor"){ // bin ^ operator
 
     }
-    if(command == "if"){
+    if(command == "if"){ // logic if operator
 
     }
 }
