@@ -230,10 +230,7 @@ public:
     }
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 void AnalyseCommand(string command , Var arg1 , Var arg2){
     if(command == "addvar"){
         Var newvar;
@@ -261,62 +258,22 @@ void AnalyseCommand(string command , Var arg1 , Var arg2){
     if(command )
 }
 
+
+
 void Exec(string filename){
     std::ifstream codefile(filename, std::ios::in);
 
-    string arg1,arg2;
-
-    string command;
-
-=======
-void Exec(string filename){
-    std::ifstream codefile(filename, std::ios::in);
-
->>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
-=======
-void Exec(string filename){
-    std::ifstream codefile(filename, std::ios::in);
-
->>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
     if(codefile.fail())
     {
         std::cerr << "Cannot to open file\n";
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     while(!codefile.eof()){
         codefile >> command;
         codefile.getline(arg1,256,',');
         codefile.getline(arg2.var.label,256,',');
         AnalyseCommand(command,arg1,arg2);
     }
-=======
->>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
-=======
->>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
-=======
-void Exec(string filename){
-    std::ifstream codefile(filename, std::ios::in);
-
-    if(codefile.fail())
-    {
-        std::cerr << "Cannot to open file\n";
-    }
-
->>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
-=======
-void Exec(string filename){
-    std::ifstream codefile(filename, std::ios::in);
-
-    if(codefile.fail())
-    {
-        std::cerr << "Cannot to open file\n";
-    }
-
->>>>>>> 52dc75aa4b8b266fc579041e6cc685dbd302a5b4
-
-
 }
 
 
