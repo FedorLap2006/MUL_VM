@@ -274,7 +274,7 @@ void AnalyseCommand(string command , Var arg1 , Var arg2){
 
     }
     if(command == "if"){
-
+        
     }
 }
 
