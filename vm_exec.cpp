@@ -108,6 +108,12 @@ public:
 vector<Var> mapVars;
 vector<Var> CurFuncVars;
 
+std::map<string,Var> SysRegs;
+
+void init_sys(void){
+
+}
+
 
 void RegVar(Var *tmp,bool is_local=false){
     if(!is_local) mapVars.insert(mapVars.end(),*tmp);
@@ -230,29 +236,36 @@ public:
     }
 };
 
+bool add_loc_var=false;
 
-void AnalyseCommand(string command , Var arg1 , Var arg2){
+int AnalyseCommand(string command , string arg1 , string arg2){
+    bool is_loc = add_loc_var;
     if(command == "addvar"){
         Var newvar;
         if(arg1 == "int"){
             newvar.var.kind_type=TINT;
             newvar.var.ival=0;
+            RegVar(newvar,is_loc);
         }
         if(arg1 == "double"){
             newvar.var.kind_type=TD;
             newvar.var.ival=0;
+            RegVar(newvar,is_loc);
         }
         if(arg1 == "char"){
             newvar.var.kind_type=TCH;
             newvar.var.ival=0;
+            RegVar(newvar,is_loc);
         }
         if(arg1 == "string"){
             newvar.var.kind_type=TSTR;
             newvar.var.ival=0;
+            RegVar(newvar,is_loc);
         }
         if(arg1 == "ptr"){
             newvar.var.kind_type=TADDR;
             newvar.var.ival=0;
+            RegVar(newvar,is_loc);
         }
     }
     if(command == "add"){
@@ -274,7 +287,7 @@ void AnalyseCommand(string command , Var arg1 , Var arg2){
 
     }
     if(command == "if"){
-        
+
     }
 }
 
@@ -282,7 +295,8 @@ void AnalyseCommand(string command , Var arg1 , Var arg2){
 
 void Exec(string filename){
     std::ifstream codefile(filename, std::ios::in);
-
+    int DEF_FUNC=100,DEF_VAR=200,ENDDEF_FUNC=1;
+    string arg1,arg2;
     if(codefile.fail())
     {
         std::cerr << "Cannot to open file\n";
@@ -291,8 +305,15 @@ void Exec(string filename){
     while(!codefile.eof()){
         codefile >> command;
         codefile.getline(arg1,256,',');
-        codefile.getline(arg2.var.label,256,',');
-        AnalyseCommand(command,arg1,arg2);
+        codefile.getline(arg2,256,',');
+        if(command == "newvar" && is_func) AnalyseCommand(command,arg1,arg2);
+        else{
+            int res=AnalyseCommand(command,arg1,arg2);
+            if(res == DEF_FUNC) add_loc_var=true;
+            if(res == ENDDEF_FUNC) add_loc_var=false;
+        }
+
+
     }
 }
 
