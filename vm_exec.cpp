@@ -112,6 +112,10 @@ std::map<string,Var> SysRegs;
 
 void init_sys(void){
 
+    SysRegs.insert(std::pair<string,Var>("ASave",{id_var : 0;var.kind_type : TADDR;var.ival=0;var.label : "ASave"}));
+    SysRegs.insert(std::pair<string,Var>("Isave",{id_var : 0;var.kind_type : TINT;var.ival=0;var.label : "Isave"}));
+    SysRegs.insert(std::pair<string,Var>("Ssave",{id_var : 0;var.kind_type : TSTR;var.ival=0;var.label : "Ssave"}));
+    SysRegs.insert(std::pair<string,Var>("Dsave",{id_var : 0;var.kind_type : TD;var.ival=0;var.label : "Dsave"}));
 }
 
 
@@ -238,6 +242,15 @@ public:
 
 bool add_loc_var=false;
 
+string CopyFromPos(string str,int pos){
+    string ret;
+    if(pos > str.size() || pos < 0) return "$$#error#$$";
+    for (size_t it2 = pos; it2 < str.size() ; it2++) {
+        ret.insert(ret.end(),str[it]);
+    }
+    return ret;
+}
+
 int AnalyseCommand(string command , string arg1 , string arg2){
     bool is_loc = add_loc_var;
     if(command == "addvar"){ // add variable-command
@@ -249,27 +262,36 @@ int AnalyseCommand(string command , string arg1 , string arg2){
         }
         if(arg1 == "double"){
             newvar.var.kind_type=TD;
-            newvar.var.ival=0;
+            newvar.var.dval=0;
             RegVar(newvar,is_loc);
         }
         if(arg1 == "char"){
             newvar.var.kind_type=TCH;
-            newvar.var.ival=0;
+            newvar.var.ch=0;
             RegVar(newvar,is_loc);
         }
         if(arg1 == "string"){
             newvar.var.kind_type=TSTR;
-            newvar.var.ival=0;
+            newvar.var.sval=0;
             RegVar(newvar,is_loc);
         }
         if(arg1 == "ptr"){
             newvar.var.kind_type=TADDR;
-            newvar.var.ival=0;
+            newvar.var.pval=0x0;
             RegVar(newvar,is_loc);
         }
     }
     if(command == "add"){ // math + operator
-
+        if(arg1[0] == '$')
+        {
+            string num1=CopyFromPos(arg1,1);
+            if(arg2[0] == "$")
+            {
+                string num2=CopyFromPos(arg2,1);
+                map<string,Var>::iterator itreg=SysRegs.find("Dsave");
+                iteg->var->dval=stoi(num2,NULL);
+            }
+        }
     }
     if(command == "sub"){ // math - operator
 
