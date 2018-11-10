@@ -5,243 +5,16 @@
 #include <fstream>
 #include <iostream>
 #include <cstdlib>
-
+#include "Variable.cpp"
+#include "Operations.cpp"
 
 using namespace std;
 
 
-enum{
-	TINT,
-	TCH,
-	TSTR,
-	TD,
-	TADDR,
-	TSTRUCT
-};
-
-class Var{
-private:
-	struct VarNode{
-		union{
-			char *sval;
-			char ch;
-			long long int ival;
-			long double dval;
-
-			void *pval;
-		};
-
-		int kind_type;
-		string label;
-		bool is_localvar=false;
-	};
-
-	struct StructVal{
-		vector<struct VarNode> dictVarsStruct;
-		string labelstruct;
-		int id_var;
-		bool is_localvar=false;
-	};
 
 
-public:
-	VarNode var;
-	struct StructVal varstruct;
-	int id_var;
-	bool operator ==(Var eq){
-		if(this->var.kind_type != eq.var.kind_type) return false;
-		switch(this->var.kind_type){
-			case TINT:{
-
-				if(this->var.ival != eq.var.ival) return false;
-			}
-			case TADDR:{
-				if(this->var.pval != eq.var.pval) return false;
-			}
-			case TCH:{
-				if(this->var.ch != eq.var.ch) return false;
-			}
-			case TD:{
-				if(this->var.dval != eq.var.dval) return false;
-			}
-			case TSTR:{
-				if(strcmp(this->var.sval,eq.var.sval) != 0) return false;
-			}
-			case TSTRUCT:{
-				break;
-			}
-
-		}
-		return true;
-	}
-};
-
-class Struct : private Var{
-public:
 
 
-	StructVal var;
-
-	bool operator ==(Var eq){
-		if(this->var.kind_type != eq.var.kind_type) return false;
-		switch(this->var.kind_type){
-			case TINT:{
-
-				if(this->var.ival != eq.var.ival) return false;
-			}
-			case TADDR:{
-				if(this->var.pval != eq.var.pval) return false;
-			}
-			case TCH:{
-				if(this->var.ch != eq.var.ch) return false;
-			}
-			case TD:{
-				if(this->var.dval != eq.var.dval) return false;
-			}
-			case TSTR:{
-				if(strcmp(this->var.sval,eq.var.sval) != 0) return false;
-			}
-		}
-		return true;
-	}
-};
-
-
-vector<Var> mapVars;
-vector<Var> CurFuncVars;
-
-std::map<string,Var> SysRegs;
-
-void init_sys(void){
-
-	SysRegs.insert(std::pair<string,Var>("ASave",{id_var : 0;var.kind_type : TADDR;var.paddr=0x0;var.label : "ASave"}));
-	SysRegs.insert(std::pair<string,Var>("Isave",{id_var : 0;var.kind_type : TINT;var.ival=0;var.label : "Isave"}));
-	SysRegs.insert(std::pair<string,Var>("Ssave",{id_var : 0;var.kind_type : TSTR;var.sval=0;var.label : "Ssave"}));
-	SysRegs.insert(std::pair<string,Var>("Csave",{id_var : 0;var.kind_type : TCH;var.ch=0;var.label : "Csave"}));
-	SysRegs.insert(std::pair<string,Var>("Dsave",{id_var : 0;var.kind_type : TD;var.dval=0;var.label : "Dsave"}));
-}
-
-
-void RegVar(Var *tmp,bool is_local=false){
-	if(!is_local) mapVars.insert(mapVars.end(),*tmp);
-	else{
-		CurFuncVars.insert(CurFuncVars.end(),*tmp);
-		CurFuncVars[CurFuncVars.end()].var.is_localvar=true;
-
-		mapVars.insert(mapVars.end(),*tmp);
-
-		mapVars[mapVars.end()].var.is_localvar=true;
-		return mapVars
-	}
-
-}
-
-void DelVar(Var *find_var,bool is_local=true){
-
-	for (vector<Var>::iterator it = mapVars.begin(); it != mapVars.end(); it++) {
-		if(*it == find_var) mapVars[it].erase(it);
-	}
-	if(is_local){
-		for (vector<Var>::iterator it = CurFuncVars; it != CurFuncVars.end(); it++) {
-			if(*it == find_var) CurFuncVars[it].erase(it);
-		}
-	}
-	return;
-}
-
-class OperatorFuncs{
-public:
-
-	void Sum(Var arg1,Var arg2,Var &argres){
-		if(arg1.var.kind_type == TDOUBLE)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.ival+arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg1.var.kind_type == TINT)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival+(long long int)arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TDOUBLE)
-		{
-			if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival+arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TINT)
-		{
-			if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival+(long long int)arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-
-	}
-	void Sub(Var arg1,Var arg2,Var &argres){
-		if(arg1.var.kind_type == TDOUBLE)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.ival-arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg1.var.kind_type == TINT)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival-(long long int)arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TDOUBLE)
-		{
-			if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival-arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TINT)
-		{
-			if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival-(long long int)arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-	}
-	void Pow(Var arg1,Var arg2,Var argres){
-		if(arg1.var.kind_type == TDOUBLE)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.iva*arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg1.var.kind_type == TINT)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival*(long long int)arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TDOUBLE)
-		{
-			if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival*arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TINT)
-		{
-			if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival*(long long int)arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-	}
-	void Div(Var arg1,Var arg2,Var argres){
-		if(arg1.var.kind_type == TDOUBLE)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.dval=(long double)arg1.var.ival/arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg1.var.kind_type == TINT)
-		{
-			if(arg1.var.kind_type == TINT) argres.var.ival=arg1.var.ival/(long long int)arg1.var.dval;
-			if(arg1.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TDOUBLE)
-		{
-			if(arg12var.kind_type == TINT) argres.var.dval=(long double)arg2.var.ival/arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-		if(arg2.var.kind_type == TINT)
-		{
-			if(arg2.var.kind_type == TINT) argres.var.ival=arg2.var.ival/(long long int)arg2.var.dval;
-			if(arg2.var.kind_type == TDOUBLE) return;
-		}
-	}
-};
 
 bool add_loc_var=false;
 
@@ -318,6 +91,43 @@ int AnalyseCommand(string command , string arg1 , string arg2){
 					string c2=CopyFromPos(arg1,2);
 					map<string,Var>::iterator itreg=SysRegs.find("Asave");
 					itreg.value_type.var->pval=atol(c2.c_str());
+					break;
+				}
+			}
+		}
+		if(arg2[0] == '$')
+		{
+			string num1=CopyFromPos(arg2,1);
+			switch(arg2[1])
+			{
+				case '%':{ // float/double
+			   		string num2=CopyFromPos(arg2,2);
+					map<string,Var>::iterator itreg=SysRegs.find("Dsave");
+					itreg.value_type.var->dval+=atof(num2.c_str());;
+					break;
+				}
+				case '@':{ // int
+					string num2=CopyFromPos(arg2,2);
+					map<string,Var>::iterator itreg=SysRegs.find("Isave");
+					itreg.value_type.var->ival+=atol(num2.c_str());
+					break;
+				}
+				case '$':{ // sym
+					string c2=CopyFromPos(arg2,2);
+					map<string,Var>::iterator itreg=SysRegs.find("Csave");
+					itreg.value_type.var->ch+=c2[0];
+					break;
+				}
+				case '#':{ // string
+					string s2=CopyFromPos(arg2,2);
+					map<string,Var>::iterator itreg=SysRegs.find("Ssave");
+					itreg.value_type.var->pval+=s2;	
+					break;
+				}
+				case '&':{
+					string c2=CopyFromPos(arg2,2);
+					map<string,Var>::iterator itreg=SysRegs.find("Asave");
+					itreg.value_type.var->pval+=atol(c2.c_str());
 					break;
 				}
 			}
