@@ -73,34 +73,13 @@ public:
 	}
 };
 
-class Struct : private Var{
+class Struct : public Var{
 public:
 
 
 	StructVal var;
 
-	bool operator ==(Var eq){
-		if(this->var.kind_type != eq.var.kind_type) return false;
-		switch(this->var.kind_type){
-			case TINT:{
-
-				if(this->var.ival != eq.var.ival) return false;
-			}
-			case TADDR:{
-				if(this->var.pval != eq.var.pval) return false;
-			}
-			case TCH:{
-				if(this->var.ch != eq.var.ch) return false;
-			}
-			case TD:{
-				if(this->var.dval != eq.var.dval) return false;
-			}
-			case TSTR:{
-				if(strcmp(this->var.sval,eq.var.sval) != 0) return false;
-			}
-		}
-		return true;
-	}
+	bool operator ==(StructVal eq);
 };
 
 
@@ -111,11 +90,11 @@ std::map<string,Var> SysRegs;
 
 void init_sysreg(void){
 
-	SysRegs.insert(std::pair<string,Var>("ASave",{id_var : 0;var.kind_type : TADDR;var.paddr=0x0;var.label : "ASave"}));
-	SysRegs.insert(std::pair<string,Var>("Isave",{id_var : 0;var.kind_type : TINT;var.ival=0;var.label : "Isave"}));
-	SysRegs.insert(std::pair<string,Var>("Ssave",{id_var : 0;var.kind_type : TSTR;var.sval=0;var.label : "Ssave"}));
-	SysRegs.insert(std::pair<string,Var>("Csave",{id_var : 0;var.kind_type : TCH;var.ch=0;var.label : "Csave"}));
-	SysRegs.insert(std::pair<string,Var>("Dsave",{id_var : 0;var.kind_type : TD;var.dval=0;var.label : "Dsave"}));
+	SysRegs.insert(make_pair<string,Var>(("ASave",{id_var : 0;var.kind_type : TADDR;var.paddr=0x0;var.label : "ASave"));
+	SysRegs.insert(make_pair<string,Var>("Isave",{id_var : 0;var.kind_type : TINT;var.ival=0;var.label : "Isave"}));
+	SysRegs.insert(make_pair<string,Var>("Ssave",{id_var : 0;var.kind_type : TSTR;var.sval=0;var.label : "Ssave"}));
+	SysRegs.insert(make_pair<string,Var>("Csave",{id_var : 0;var.kind_type : TCH;var.ch=0;var.label : "Csave"}));
+	SysRegs.insert(make_pair<string,Var>("Dsave",{id_var : 0;var.kind_type : TD;var.dval=0;var.label : "Dsave"}));
 }
 
 void RegVar(Var *tmp,bool is_local=false){
